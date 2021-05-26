@@ -53,25 +53,26 @@ class LRUCache:
             # update was done
             return False
         elif prev_key == None:
-            # the key was the least recently used key. we must update the lru_index
-            # the next lru key, make the current key the most recently used key,
-            # and update the mru_index
+            # the key was the least recently used key. we must update the lru_key to be
+            # the next least recently used key
             self._lru_key = next_key
             self._cache[next_key]['prev'] = None
         else:
+            # the updated key falls in the middle of the list. its neighbors must be joined together
             self._cache[prev_key]['next'] = next_key
             self._cache[next_key]['prev'] = prev_key
         return True
 
     def put(self, key, value):
         if key in self._cache:
-            update_position = self._update_existing_key_position_context(key)
-            if not update_position:
+            if not self._update_existing_key_position_context(key):
                 # if the above function returns false, we need only update the value
                 # associated with the key. the context has not changed
                 self._cache[key]["value"] = value
                 return
         else:
+            # here we are adding a new key to the list. we must check whether this addition
+            # will require us to delete the lru key
             if self._current_size == self.max_size:
                 upcoming_lru_key = self._cache[self._lru_key]['next']
                 # handle the case where the max size is 1
@@ -130,6 +131,8 @@ class LRUCache:
                     self._mru_key = new_mru
                 
             # handle the case where there is only one key and we are deleting it
+            # note that in updating the current context, the key parameter will not
+            # be the lru key unless it is the only key currently in the cache
             if key == self._lru_key:
                 self._lru_key = None
             if key == self._mru_key:

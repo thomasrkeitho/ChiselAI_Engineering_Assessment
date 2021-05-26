@@ -3,6 +3,7 @@ greater than or equal to 1. It has been tested with Python 3.7 and only uses cor
 
 Example:
 /*
+
 from lru_cache import LRUCache
 
 c = LRUCache(4)
@@ -16,6 +17,7 @@ c.get(1)
 c.delete("key")
 
 c.reset()
+
 */
 
 Note that the cache is agnostic with regards to types of keys and types of values.
