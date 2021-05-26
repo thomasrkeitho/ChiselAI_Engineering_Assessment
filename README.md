@@ -8,9 +8,13 @@ from lru_cache import LRUCache
 c = LRUCache(4)
 
 c.put(1, 2)
+
 c.put("key", "value")
+
 c.get(1)
+
 c.delete("key")
+
 c.reset()
 */
 
